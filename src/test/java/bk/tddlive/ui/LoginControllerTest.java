@@ -1,16 +1,15 @@
 package bk.tddlive.ui;
 
-import bk.tddlive.security.AuthService;
-import bk.tddlive.security.Authentication;
-import bk.tddlive.security.NonExistingUserException;
-import bk.tddlive.security.WrongPasswordException;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import bk.tddlive.security.AuthService;
+import bk.tddlive.security.Authentication;
 
 public class LoginControllerTest {
 
@@ -50,14 +49,14 @@ public class LoginControllerTest {
     //    ■ 폼 전송 시, ID/PW 불일치(사용자 없음), 폼 뷰 리턴 (비정상)
     @Test
     public void whenNonExistingUser_returnFormView() throws Exception {
-        when(mockAuthService.authenticate(NO_USER_ID, PASSWORD)).thenThrow(new NonExistingUserException());
+        when(mockAuthService.authenticate(NO_USER_ID, PASSWORD)).thenThrow(new AuthService.NonExistingUserException());
         assertFormViewWhenIdOrPwNotMatch(NO_USER_ID, PASSWORD);
     }
 
     //    ■ 폼 전송 시, ID/PW 불일치(잘못된 암호), 폼 뷰 리턴 (비정상)
     @Test
     public void whenWrongPassword_returnFormView() throws Exception {
-        when(mockAuthService.authenticate(USER_ID, WRONG_PASSWORD)).thenThrow(new WrongPasswordException());
+        when(mockAuthService.authenticate(USER_ID, WRONG_PASSWORD)).thenThrow(new AuthService.WrongPasswordException());
         assertFormViewWhenIdOrPwNotMatch(USER_ID, WRONG_PASSWORD);
     }
 
